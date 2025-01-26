@@ -1,0 +1,80 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def draw_line_plot():
+    # Load and clean the dataset
+    df = pd.read_csv('fcc-forum-pageviews.csv', index_col='date', parse_dates=True)
+    
+    # Filter out the top and bottom 2.5% of the dataset
+    df = df[(df['page_views'] >= df['page_views'].quantile(0.025)) & 
+            (df['page_views'] <= df['page_views'].quantile(0.975))]
+
+    # Draw the line plot
+    plt.figure(figsize=(12, 6))
+    plt.plot(df.index, df['page_views'], color='blue', lw=2)
+    plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+    plt.xlabel('Date')
+    plt.ylabel('Page Views')
+    plt.tight_layout()
+    plt.savefig('line_plot.png')
+    return plt
+
+def draw_bar_plot():
+    # Load and clean the dataset
+    df = pd.read_csv('fcc-forum-pageviews.csv', index_col='date', parse_dates=True)
+    
+    # Filter out the top and bottom 2.5% of the dataset
+    df = df[(df['page_views'] >= df['page_views'].quantile(0.025)) & 
+            (df['page_views'] <= df['page_views'].quantile(0.975))]
+    
+    # Resample by month and calculate average page views
+    df_monthly = df.resample('M').mean()
+
+    # Create the bar plot
+    df_monthly['year'] = df_monthly.index.year
+    df_monthly['month'] = df_monthly.index.month
+
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x='year', y='page_views', hue='month', data=df_monthly,
+                palette='Set1', ci=None)
+    plt.title('Average Daily Page Views per Month')
+    plt.xlabel('Years')
+    plt.ylabel('Average Page Views')
+    plt.legend(title='Months', loc='upper left', labels=[
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+    plt.tight_layout()
+    plt.savefig('bar_plot.png')
+    return plt
+
+def draw_box_plot():
+    # Load and clean the dataset
+    df = pd.read_csv('fcc-forum-pageviews.csv', index_col='date', parse_dates=True)
+    
+    # Filter out the top and bottom 2.5% of the dataset
+    df = df[(df['page_views'] >= df['page_views'].quantile(0.025)) & 
+            (df['page_views'] <= df['page_views'].quantile(0.975))]
+    
+    # Extract year and month from the index
+    df['year'] = df.index.year
+    df['month'] = df.index.month
+
+    # Create the figure and axes
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6))
+
+    # Year-wise box plot (Trend)
+    sns.boxplot(x='year', y='page_views', data=df, ax=ax1)
+    ax1.set_title('Year-wise Box Plot (Trend)')
+    ax1.set_xlabel('Year')
+    ax1.set_ylabel('Page Views')
+
+    # Month-wise box plot (Seasonality)
+    sns.boxplot(x='month', y='page_views', data=df, ax=ax2)
+    ax2.set_title('Month-wise Box Plot (Seasonality)')
+    ax2.set_xlabel('Month')
+    ax2.set_ylabel('Page Views')
+    ax2.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+
+    plt.tight_layout()
+    plt.savefig('box_plot.png')
+    return plt
