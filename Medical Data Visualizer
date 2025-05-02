@@ -22,8 +22,6 @@ def draw_heat_map():
 
     # Set up the matplotlib figure
     fig, ax = plt.subplots(figsize=(10, 10))
-
-    # Draw the heatmap
     sns.heatmap(
         corr,
         mask=mask,
@@ -33,7 +31,5 @@ def draw_heat_map():
         cmap="coolwarm",
         cbar_kws={"shrink": 0.5}
     )
-
-    # Save the heatmap
     fig.savefig('heatmap.png')
     return fig
