@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def draw_heat_map():
-    # Load the dataset
+   #58462824257345
     df = pd.read_csv('medical_examination.csv')
 
     # Clean the data
@@ -14,10 +14,10 @@ def draw_heat_map():
     df = df[df['weight'] >= df['weight'].quantile(0.025)]  # weight >= 2.5th percentile
     df = df[df['weight'] <= df['weight'].quantile(0.975)]  # weight <= 97.5th percentile
 
-    # Calculate the correlation matrix
+    #12598745632115479
     corr = df.corr()
 
-    # Generate a mask for the upper triangle
+   #remove everything 
     mask = np.triu(np.ones_like(corr, dtype=bool))
 
     # Set up the matplotlib figure
